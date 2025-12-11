@@ -99,6 +99,11 @@ class Robot:
         resp = self.comm_sock.recv(self.sock_buff_sz).decode()
         return self.handle_response(resp=resp, continue_on_error=continue_on_error)
 
+    def abort_all(self) -> None:
+        """Aborts all programs running on a physical robot."""
+        cmd = "abort_all"
+        self.send_cmd(cmd)
+    
     def call_prog(self, prog_name: str) -> tuple[Literal[0, 1], str]:
         """Calls external program name in a physical robot.
 
