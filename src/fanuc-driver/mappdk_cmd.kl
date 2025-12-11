@@ -7,6 +7,20 @@
 --                      external program.
 ----------------------------------------------------
 
+ROUTINE ABORT_ALL(cmd: STRING): STRING
+----------------------------------------------------
+-- Function: Abort all tasks.
+----------------------------------------------------
+-- Arguments:
+--      cmd [IN]:           command string.
+----------------------------------------------------
+-- Return value: response string.
+----------------------------------------------------
+BEGIN
+    ABORT_TASK('*ALL*', TRUE, TRUE, status)
+END ABORT_ALL
+
+
 ROUTINE GET_CURPOS(cmd: STRING): STRING
 ----------------------------------------------------
 -- Function: Get current cartesian position of TCP.
@@ -614,6 +628,12 @@ ROUTINE HANDLE_CMD(cmd: STRING;
 BEGIN
     IF cmd = 'exit' THEN
         resp = '0:success'
+        RETURN(FALSE)
+    ENDIF
+
+    -- abort
+    IF SUB_STR(cmd, 1, 9) = 'abort_all' THEN
+        resp = '0:aborted' + ABORT_ALL(cmd)
         RETURN(FALSE)
     ENDIF
 
